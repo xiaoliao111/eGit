@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            width: 100%;
+            height:100%;
+            background-image: url('../hw2/img/banmaxian1.jpg')
+        }
+        .box{
+            width:250px;height:520px;
+            padding:15px 15px;
+            border:2px solid #ccc; 
+            border-radius:16px;margin:0 auto;
+            background-color: #313131;
+        }
+        .box #top, .box #center, .box #count
+        {
+            margin: auto;
+            /* margin-left: 5px; */
+            /* float: left; */
+            width: 100px;
+            height: 100px;
+            padding: 15px;
+            border-radius: 50%;
+            border: 1px solid #000;
+            background-color: rgb(27, 27, 27);
+        }
+        
+        /* 放置矢量图片 */
+        @font-face {
+            font-family: 'red';  /* Project id 4454475 */
+            src: url('http://at.alicdn.com/t/c/font_4454475_h2r0smxaxdt.woff2?t=1709642629958') format('woff2'),
+            url('http://at.alicdn.com/t/c/font_4454475_h2r0smxaxdt.woff?t=1709642629958') format('woff'),
+            url('http://at.alicdn.com/t/c/font_4454475_h2r0smxaxdt.ttf?t=1709642629958') format('truetype');
+        }
+        .red{
+            font-family: "red"!important;
+            font-size: 100px;
+            font-style: normal;
+            color:rgb(187, 45, 45);
+        }
+        
+        .count1{
+            line-height: 100px;
+            text-align: center;
+            font-size: 35px;
+            color:rgb(210, 200, 200);
+        }
+    
+        @font-face {
+            font-family: 'green';  /* Project id 4454475 */
+            src: url('http://at.alicdn.com/t/c/font_4454475_h2r0smxaxdt.woff2?t=1709642629958') format('woff2'),
+            url('http://at.alicdn.com/t/c/font_4454475_h2r0smxaxdt.woff?t=1709642629958') format('woff'),
+            url('http://at.alicdn.com/t/c/font_4454475_h2r0smxaxdt.ttf?t=1709642629958') format('truetype');
+        }
+        
+        .gray{
+            background-color:#eee;
+        }
+
+        .green{font-family: "green"!important;
+            font-size: 100px;
+            font-style: normal;
+            color:rgb(38, 217, 74);}
+
+        .marquee{
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            height: 100px;
+            width: 250px;
+            background-color: rgb(27, 27, 27);
+            font-size: 25px;
+            text-align: center;
+            line-height: 100px;
+            color: #d0c7c7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <div id="top" >&#xe623;</div>
+        <div id="center">&#xe601;</div>
+        <div id="count" class="count1"></div>
+         <!-- 提示信息 -->
+        <div id="text" class="marquee"></div>
+    </div>
+    
+</body>
+<script>
+    //获取元素对象
+    var lamp = {
+        top: {
+            obj: document.getElementById('top'),
+            timeout: 25,
+            style:['red','red'],
+            next:'center',
+            text:'不通过'
+        },
+        center:{
+            obj: document.getElementById('center'),
+            timeout: 25,
+            //数组
+            style:['green','green'],
+            next:'top',
+            text:'通过'
+        },
+        changeStyle(style){
+            this.top.obj.className = style[0]
+            this.center.obj.className = style[1]
+        },
+        
+    }
+    //获取时间对象
+    var count1 = {
+        obj: document.getElementById('count'),
+        //设置格式
+        change: function(num){
+                this.obj.innerHTML = (num <10 )?('0'+num):num
+        }
+    }
+    var now = lamp.center
+    var timeout = now.timeout
+    lamp.changeStyle(now.style)
+    count1.change(timeout)
+    changeText()
+
+    function changeText(){
+        if(now.text=='通过'){
+             var t = '现在是绿灯 ，行人请通行。'
+             document.getElementById('text').style.color = "rgb(38, 217, 74)"
+        }
+        if(now.text=='不通过'){
+            var t =  '现在是红灯，行人禁止通行。'
+            document.getElementById('text').style.color = "rgb(187, 45, 45)"
+            
+        }
+        //刷新
+        clearInterval(scro)
+
+        var scro = setInterval(function scroll(){
+            var length1 = t.length
+            var start1 = t.substring(0,1)
+            var end1 = t.substring(1, length1)
+            t = end1 +start1
+            document.getElementById('text').innerHTML = t
+        },500)
+    } 
+    //设置循环时间
+    setInterval(function(){
+        if(--timeout<=0){
+            now = lamp[now.next]
+            timeout = now.timeout
+            lamp.changeStyle(now.style)
+            changeText()
+        }
+            count1.change(timeout)
+    },1000)
+</script>
+</html>
